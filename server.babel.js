@@ -75,8 +75,10 @@ app.post('/youtube', (req, res) => {
   // .catch(err => console.log(err));
 });
 
-app.listen(9000);
-console.log('app listening on 9000')
+let port = process.env.PORT || 9000;
+
+app.listen(port);
+console.log('app listening on ' + port)
 
 
 
