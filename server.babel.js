@@ -56,7 +56,8 @@ compareRiotDataHash();
 
 app.get('/champData', (req, res) => {
   db.ref('/champData').once('value')
-    .then(snap => res.send(snap.val()));
+    .then(snap => res.send(snap.val()))
+    .catch(err => console.log(err));
 });
 
 app.post('/youtube', (req, res) => {
@@ -67,7 +68,8 @@ app.post('/youtube', (req, res) => {
   axios.get(path)
   .then((result) => {
     res.send(result.data);
-  });
+  })
+  .catch(err => console.log(err));
 });
 
 app.listen(9000);

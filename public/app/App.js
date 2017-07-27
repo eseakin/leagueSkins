@@ -46,7 +46,6 @@ class App extends Component {
   }
 
   handleSkinClick(skinName) {
-    console.log(skinName)
     if(skinName === 'default')
       skinName = this.state.activeChamp;
 
@@ -58,7 +57,7 @@ class App extends Component {
   searchYoutube(skinName) {
     axios.post('/youtube', {skinName})
     .then((res) => {
-      console.log(res.data)
+      // console.log(res.data)
       this.setState({activeVideo: res.data.items[0].id.videoId});
     })
   }
