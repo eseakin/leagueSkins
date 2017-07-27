@@ -5,7 +5,7 @@ const favicon = require('serve-favicon');
 const axios = require('axios');
 const fb = require('firebase');
 const hasher = require('object-hash');
-require('dotenv').config()
+// require('dotenv').config()
 
 const app = express();
 
