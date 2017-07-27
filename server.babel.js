@@ -15,6 +15,7 @@ app.use(favicon(path.join(__dirname, './public', 'favicon.png')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
+  console.log('get')
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -55,21 +56,23 @@ const compareRiotDataHash = function() {
 
 
 app.get('/champData', (req, res) => {
+  console.log('champData')
   db.ref('/champData').once('value')
     .then(snap => res.send(snap.val()))
     .catch(err => console.log(err));
 });
 
 app.post('/youtube', (req, res) => {
+  console.log('youtube')
   let skinName = req.body.skinName;
   let key = process.env.youtube_key;
   let path = 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC0NwzCHb8Fg89eTB5eYX17Q&maxResults=5&q=' + skinName + '&key=' + key;
-
-  axios.get(path)
-  .then((result) => {
-    res.send(result.data);
-  })
-  .catch(err => console.log(err));
+  res.send({});
+  // axios.get(path)
+  // .then((result) => {
+  //   res.send(result.data);
+  // })
+  // .catch(err => console.log(err));
 });
 
 app.listen(9000);
