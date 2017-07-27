@@ -51,7 +51,7 @@ const compareRiotDataHash = function() {
         });
     });
 }
-compareRiotDataHash();
+// compareRiotDataHash();
 
 
 app.get('/champData', (req, res) => {
