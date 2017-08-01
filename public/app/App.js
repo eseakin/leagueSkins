@@ -10,7 +10,8 @@ class App extends Component {
       activeView: 'champList',
       activeChamp: 'Aatrox',
       activeVideo: 'S1KMKxtiliY',
-      youtubePath: 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC0NwzCHb8Fg89eTB5eYX17Q&maxResults=5&q='
+      youtubePath: 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC0NwzCHb8Fg89eTB5eYX17Q&maxResults=5&q=',
+      backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg'
     };
   }
 
@@ -36,7 +37,7 @@ class App extends Component {
 
     skinName = skinName.split(' ').join('+');
 
-    this.setState({activeView: 'champDetail', activeChamp: champ});
+    this.setState({activeView: 'champDetail', activeChamp: champ, backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' + champ + '_0.jpg'});
 
     this.searchYoutube(skinName);
   }
@@ -63,7 +64,7 @@ class App extends Component {
   }
 
   render() {
-    const { champData, activeView, activeChamp, activeVideo } = this.state;
+    const { champData, activeView, activeChamp, activeVideo, backgroundUrl } = this.state;
 
     let version = '7.14.1'
     let champ = {};
@@ -76,7 +77,7 @@ class App extends Component {
     const skinPath = 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/';
 
     return (
-      <div className="App">
+      <div className="App" style={{background: 'url(http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg) no-repeat center center fixed'}}>
         <div className="App-header">
           <h2>Welcome to League Skins</h2>
           <p className="App-intro">
