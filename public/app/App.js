@@ -11,7 +11,22 @@ class App extends Component {
       activeChamp: 'Aatrox',
       activeVideo: 'S1KMKxtiliY',
       youtubePath: 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC0NwzCHb8Fg89eTB5eYX17Q&maxResults=5&q=',
-      backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg'
+      backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg',
+      iconStyle: {
+        marginLeft: 5,
+        marginRight: 5,
+        marginBottom: 5,
+        marginTop: 700,
+        opacity: 0
+      },
+      iconLoadedStyle: {
+        marginLeft: 5,
+        marginRight: 5,
+        marginBottom: 5,
+        marginTop: 5,
+        opacity: 1
+      },
+      iconsLoaded: []
     };
   }
 
@@ -37,9 +52,15 @@ class App extends Component {
 
     skinName = skinName.split(' ').join('+');
 
-    this.setState({activeView: 'champDetail', activeChamp: champ, backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' + champ + '_0.jpg'});
+    this.setState({
+      activeChamp: champ, 
+      iconsLoaded: this.state.iconsLoaded.fill(false),
+      backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' + champ + '_0.jpg'
+    });
 
     this.searchYoutube(skinName);
+
+    setTimeout(() => this.setState({ activeView: 'champDetail' }), 1000)
   }
 
   handleBack() {
@@ -63,9 +84,15 @@ class App extends Component {
     })
   }
 
-  render() {
-    const { champData, activeView, activeChamp, activeVideo, backgroundUrl } = this.state;
+  onIconLoad(i) {
+    // console.log(`loaded ${i}`)
+    const iconsLoaded = this.state.iconsLoaded;
+    iconsLoaded[i] = true;
+    this.setState({iconsLoaded});
+  }
 
+  render() {
+    const { champData, activeView, activeChamp, activeVideo, backgroundUrl, iconStyle, iconLoadedStyle, iconsLoaded } = this.state;
     let version = '7.14.1'
     let champ = {};
 
@@ -86,13 +113,13 @@ class App extends Component {
         </div>
 
         {activeView === 'champList' && <div name='champList'>
-          {champData && Object.keys(champData.data).map(champ => {
+          {champData && Object.keys(champData.data).map((champ, i) => {
             const name = champData.data[champ].name
             const title = champData.data[champ].title
-
+            // console.log(`render ${i} ${iconsLoaded[i]}`)
             return (
-              <span className='icon' onClick={() => this.handleIconClick(champ)}>
-                <img src={iconPath + champ + '.png'} />
+              <span className='icon' onClick={() => this.handleIconClick(champ)} style={iconsLoaded[i] ? iconLoadedStyle : iconStyle}>
+                <img src={iconPath + champ + '.png'} onLoad={() => this.onIconLoad(i)} />
                 <p>{name}</p>
               </span>
             )

@@ -28,13 +28,13 @@
 }
 
 .icon {
-  margin: 5px;
   /*border: 1px solid red;*/
   display: inline-block;
   width: 100px;
   height: 100px;
   position: relative;
   cursor: pointer;
+  transition: 2s margin-top, 1s opacity;
 }
 
 .icon > img {
