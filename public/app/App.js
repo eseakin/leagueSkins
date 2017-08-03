@@ -110,8 +110,13 @@ class App extends Component {
     if(skinName === 'default')
       skinName = champ + ' top plays';
       // skinName = this.state.activeChamp;
+    let name;
 
-    let name = this.state.champData.data[champ].skins[i].name;  
+    if(i === 0)
+      name = this.state.champData.data[champ].name;
+    else
+      name = this.state.champData.data[champ].skins[i].name;  
+    
     let title = this.state.champData.data[champ].title;  
 
     this.setState({backgroundUrl: splashPath, headerText: name + ': ' + title});
