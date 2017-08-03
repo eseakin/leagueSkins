@@ -67,6 +67,7 @@ app.post('/youtube', (req, res) => {
   let skinName = req.body.skinName;
   let key = process.env.youtube_key;
   let path = 'https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UC0NwzCHb8Fg89eTB5eYX17Q&maxResults=5&q=' + skinName + '&key=' + key;
+  // let path = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=' + skinName + '&key=' + key;
 
   axios.get(path)
   .then((result) => {

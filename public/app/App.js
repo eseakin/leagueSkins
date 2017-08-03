@@ -7,6 +7,8 @@ class App extends Component {
     super(props);
 
     this.state = {
+      windowWidth: window.innerWidth,
+      headerText: 'Pick a champ to preview their skins',
       activeView: 'champList',
       activeChamp: 'Aatrox',
       activeVideo: 'S1KMKxtiliY',
@@ -26,11 +28,37 @@ class App extends Component {
         marginTop: 5,
         opacity: 1
       },
-      iconsLoaded: []
+      skinStyle: {
+        marginLeft: 700,
+        marginRight: 5,
+        marginBottom: 5,
+        marginTop: 5,
+        opacity: 0
+      },
+      skinLoadedStyle: {
+        marginLeft: 5,
+        marginRight: 5,
+        marginBottom: 5,
+        marginTop: 5,
+        opacity: 1
+      },
+      iconsLoaded: [],
+      skinsLoaded: []
     };
   }
 
+  componentDidMount() {
+    const context = this;  
+    window.addEventListener("resize", this.updateDimensions.bind(context));
+  }
+
+  componentWillUnmount() {
+    const context = this;  
+    window.removeEventListener("resize", this.updateDimensions.bind(context));
+  }
+
   componentWillMount() {
+    this.updateDimensions();
     axios.get('/champData')
     .then((res) => {
         // console.log('componentWillMount', res.data)
@@ -38,14 +66,21 @@ class App extends Component {
           champData: res.data
         });
       })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log(err));
+  }
+
+  updateDimensions() {
+    this.setState({windowWidth: window.innerWidth})
   }
 
   handleIconClick(champ) {
     let skinName = champ; //fix this to have better default video
+    let headerText;
 
-    if(this.state.champData)
+    if(this.state.champData) {
       skinName = this.state.champData.data[champ].skins[1].name;
+      headerText = this.state.champData.data[champ].name + ': ' + this.state.champData.data[champ].title;
+    }
 
     if(skinName === 'default')
       skinName = this.state.activeChamp;
@@ -54,25 +89,34 @@ class App extends Component {
 
     this.setState({
       activeChamp: champ, 
+      headerText,
       iconsLoaded: this.state.iconsLoaded.fill(false),
-      backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/' + champ + '_0.jpg'
+      skinsLoaded: [],
+      backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_0.jpg'
     });
 
     this.searchYoutube(skinName);
 
-    setTimeout(() => this.setState({ activeView: 'champDetail' }), 1000)
+    setTimeout(() => this.setState({ activeView: 'champDetail' }), 1000);
   }
 
   handleBack() {
-    this.setState({activeView: 'champList'});
+    this.setState({activeView: 'champList', headerText: 'Pick a champ to preview their skins'});
   }
 
-  handleSkinClick(skinName) {
+  handleSkinClick(skinName, splashPath, i) {
+    let champ = this.state.activeChamp;
+
     if(skinName === 'default')
-      skinName = this.state.activeChamp;
+      skinName = champ + ' top plays';
+      // skinName = this.state.activeChamp;
+
+    let name = this.state.champData.data[champ].skins[i].name;  
+    let title = this.state.champData.data[champ].title;  
+
+    this.setState({backgroundUrl: splashPath, headerText: name + ': ' + title});
 
     skinName = skinName.split(' ').join('+');
-
     this.searchYoutube(skinName);
   }
 
@@ -85,14 +129,36 @@ class App extends Component {
   }
 
   onIconLoad(i) {
-    // console.log(`loaded ${i}`)
     const iconsLoaded = this.state.iconsLoaded;
     iconsLoaded[i] = true;
     this.setState({iconsLoaded});
   }
 
+  onSkinLoad(i) {
+    console.log(`loaded ${i}`)
+    const skinsLoaded = this.state.skinsLoaded;
+    skinsLoaded[i] = true;
+    this.setState({skinsLoaded});
+  }
+
   render() {
-    const { champData, activeView, activeChamp, activeVideo, backgroundUrl, iconStyle, iconLoadedStyle, iconsLoaded } = this.state;
+    console.log('render')
+    const { 
+      windowWidth,
+      headerText,
+      champData, 
+      activeView, 
+      activeChamp, 
+      activeVideo, 
+      backgroundUrl, 
+      iconStyle, 
+      iconLoadedStyle, 
+      iconsLoaded, 
+      skinsLoaded, 
+      skinStyle, 
+      skinLoadedStyle } = this.state;
+
+      console.log(windowWidth)
     let version = '7.14.1'
     let champ = {};
 
@@ -102,21 +168,24 @@ class App extends Component {
     }
     const iconPath = 'http://ddragon.leagueoflegends.com/cdn/' + version + '/img/champion/';
     const skinPath = 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/';
+    const splashPath = 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/';
 
     return (
-      <div className="App" style={{background: 'url(http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg) no-repeat center center fixed'}}>
+      <div className="App">
         <div className="App-header">
           <h2>Welcome to League Skins</h2>
           <p className="App-intro">
-            Pick a champ below to preview their skins
+            {headerText}
           </p>
+          {activeView === 'champDetail' && <button className='backBtn' onClick={this.handleBack.bind(this)}>Back</button>}
         </div>
 
-        {activeView === 'champList' && <div name='champList'>
+        {activeView === 'champList' && <div name='champList' className='champList' style={{background: 'url(http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg) no-repeat center center fixed'}}>
+          <div style={{paddingTop: 110}}>
           {champData && Object.keys(champData.data).map((champ, i) => {
             const name = champData.data[champ].name
             const title = champData.data[champ].title
-            // console.log(`render ${i} ${iconsLoaded[i]}`)
+
             return (
               <span className='icon' onClick={() => this.handleIconClick(champ)} style={iconsLoaded[i] ? iconLoadedStyle : iconStyle}>
                 <img src={iconPath + champ + '.png'} onLoad={() => this.onIconLoad(i)} />
@@ -124,31 +193,43 @@ class App extends Component {
               </span>
             )
           })}
+          </div>
         </div>}
         {activeView === 'champDetail' && 
-        <div name='champDetail' className='champDetail'>
-          <button onClick={this.handleBack.bind(this)}>Back</button>
-          <h1>{champ.name}</h1>
-          <h3>{champ.title}</h3>
+        <div name='champDetail' className='champDetail' style={{background: 'url(' + backgroundUrl + ') no-repeat top right fixed'}}>
+          <div style={{paddingTop: 110}}>
+          
+          <div style={{textAlign: 'left', margin: '30px 5%'}}>
+          <iframe width="560" height="315" src={"https://www.youtube.com/embed/" + activeVideo + '?rel=0'} frameborder="0" allowfullscreen></iframe>
+          </div>
+
+          <div className='skinContainer'>
           {champ.skins.map((skin, i) => {
             const path = skinPath + champ.key + '_' + i + '.jpg';
+            const path2 = splashPath + champ.key + '_' + i + '.jpg';
             let skinName = skin.name;
 
             if(skinName === 'default')
               skinName = 'Default';
 
-            if(skinName.length > 20)
-              skinName = skinName.substring(0, 20);
+            // if(skinName.length > 19)
+            //   skinName = skinName.substring(0, 19);
 
             return (
               <div 
-                onClick={() => this.handleSkinClick(skin.name)}
-                style={{background: 'url("' + path + '")', backgroundSize: '175px 318px', margin: 5, width: 175, height: 318, display: 'inline-block'}}>
-                <p style={{color: 'white', marginTop: 293}}>{skinName}</p>
+                className='skinDetail'
+                onClick={() => this.handleSkinClick(skin.name, path2, i)}
+                style={skinLoadedStyle}
+              >
+                <div>
+                  <img src={path} onLoad={() => this.onSkinLoad(i)} />
+                  <p>{skinName}</p>
+                </div>
               </div>
             )
           })}
-          <iframe width="560" height="315" src={"https://www.youtube.com/embed/" + activeVideo} frameborder="0" allowfullscreen></iframe>
+          </div>
+          </div>
         </div>}
 
       </div>

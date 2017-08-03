@@ -12,10 +12,14 @@
 }
 
 .App-header {
-  background-color: #222;
+  background: rgba(25, 25, 25, .6);
   height: 90px;
   padding: 10px;
   color: white;
+  position: fixed;
+  width: 100%;
+  text-align: center;
+  z-index: 3;
 }
 
 .App-intro {
@@ -25,6 +29,31 @@
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+body {
+  background-color: black;
+}
+
+.backBtn {
+  position: absolute;
+  top: 70px;
+  left: 100px;
+  width: 75px;
+  height: 35px;
+  padding: 5px 10px;
+  font-size: 20px;
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+  color: white;
+  background-color: #1659b7;
+  border: 1px solid #1865d0;
+  border-radius: 2px;
+}
+
+.backBtn:hover {
+  background-color: #114691;
 }
 
 .icon {
@@ -61,4 +90,55 @@
   background-size: 100% 3px, 100% 3px, 3px 100%, 3px 100%;
   background-position: -13px 0%, -13px 100%, 0% -13px, 100% -13px;
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+}
+
+.champDetail, .champList {
+  background-size: cover !important;
+  display: block;
+  padding-bottom: 30px;
+}
+
+.skinContainer {
+  height: 180px;
+  margin: 20px 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.skinDetail {
+  transition: 2s margin-left, 1s opacity;
+  cursor: pointer; 
+  width: 100px; 
+  height: 180px; 
+  display: inline-block;
+}
+
+.skinDetail > div {
+  position: relative;
+  width: 100px; 
+  height: 180px; 
+  overflow: hidden;
+}
+
+.skinDetail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px; 
+  height: 180px; 
+  z-index: 1;
+  overflow: hidden;
+  clip: rect(5px, 95px, 150px, 5px);
+}
+
+.skinDetail p {
+  position: absolute;
+  left: 0;
+  top: 120px;
+  text-align: center;
+  width: 94px;
+  color: white;
+  padding: 3px;
+  z-index: 2;
+  background: rgba(25, 25, 25, .5);
 }
