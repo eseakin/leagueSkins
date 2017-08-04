@@ -95,22 +95,37 @@ body {
 .champDetail, .champList {
   background-size: cover !important;
   display: block;
-  padding-bottom: 30px;
+  /*padding-bottom: 30px;*/
+}
+
+.champDetailBackground {
+  height: auto; 
+  z-index: -1;
+  position: absolute;
+  top: 0; 
+  left: 0;
+  transition: 1s all;
 }
 
 .skinContainer {
-  height: 180px;
+  height: 194px;
   margin: 20px 0;
   width: 100%;
   overflow: hidden;
 }
 
 .skinDetail {
-  transition: 2s margin-left, 1s opacity;
+  transition: 2s margin-left, 1s opacity, .25s border;
   cursor: pointer; 
   width: 100px; 
   height: 180px; 
   display: inline-block;
+  border: 2px solid #333;
+  background-color: black;
+}
+
+.skinDetail:hover {
+  border: 2px solid #c2b189;
 }
 
 .skinDetail > div {
@@ -128,17 +143,18 @@ body {
   height: 180px; 
   z-index: 1;
   overflow: hidden;
-  clip: rect(5px, 95px, 150px, 5px);
+  clip: rect(5px, 95px, 180px, 5px);
 }
 
 .skinDetail p {
   position: absolute;
   left: 0;
-  top: 120px;
+  top: 123px;
   text-align: center;
+  height: 35px;
   width: 94px;
   color: white;
   padding: 3px;
   z-index: 2;
-  background: rgba(25, 25, 25, .5);
+  background: rgba(25, 25, 25, .8);
 }

@@ -8,6 +8,8 @@ class App extends Component {
 
     this.state = {
       windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+      resizeUpdate: false,
       headerText: 'Pick a champ to preview their skins',
       activeView: 'champList',
       activeChamp: 'Aatrox',
@@ -42,6 +44,15 @@ class App extends Component {
         marginTop: 5,
         opacity: 1
       },
+      champDetailBackgroundStyle: {
+        opacity: .1,
+        width: window.innerWidth
+      },
+      champDetailBackgroundLoadedStyle: {
+        opacity: 1,
+        width: window.innerWidth
+      },
+      backgroundLoaded: false,
       iconsLoaded: [],
       skinsLoaded: []
     };
@@ -70,7 +81,13 @@ class App extends Component {
   }
 
   updateDimensions() {
-    this.setState({windowWidth: window.innerWidth})
+    let update = this.state.resizeUpdate;
+
+    if(!update) {
+    console.log('update')
+      this.setState({windowWidth: window.innerWidth, windowHeight: window.innerHeight, resizeUpdate: true});
+      setTimeout(() => this.setState({resizeUpdate: false}), 200);
+    }
   }
 
   handleIconClick(champ) {
@@ -92,7 +109,7 @@ class App extends Component {
       headerText,
       iconsLoaded: this.state.iconsLoaded.fill(false),
       skinsLoaded: [],
-      backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_0.jpg'
+      backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_1.jpg'
     });
 
     this.searchYoutube(skinName);
@@ -115,14 +132,16 @@ class App extends Component {
     if(i === 0)
       name = this.state.champData.data[champ].name;
     else
-      name = this.state.champData.data[champ].skins[i].name;  
+      name = this.state.champData.data[champ].skins[i].name;
     
-    let title = this.state.champData.data[champ].title;  
+    let title = this.state.champData.data[champ].title;
 
-    this.setState({backgroundUrl: splashPath, headerText: name + ': ' + title});
+    this.setState({headerText: name + ': ' + title, backgroundLoaded: false});
 
     skinName = skinName.split(' ').join('+');
     this.searchYoutube(skinName);
+
+    setTimeout(() => this.setState({backgroundUrl: splashPath}), 500);
   }
 
   searchYoutube(skinName) {
@@ -132,7 +151,9 @@ class App extends Component {
       this.setState({activeVideo: res.data.items[0].id.videoId});
     })
   }
-
+  onBackgroundLoad() {
+    this.setState({backgroundLoaded: true});
+  }
   onIconLoad(i) {
     const iconsLoaded = this.state.iconsLoaded;
     iconsLoaded[i] = true;
@@ -140,7 +161,7 @@ class App extends Component {
   }
 
   onSkinLoad(i) {
-    console.log(`loaded ${i}`)
+    // console.log(`loaded ${i}`)
     const skinsLoaded = this.state.skinsLoaded;
     skinsLoaded[i] = true;
     this.setState({skinsLoaded});
@@ -150,6 +171,7 @@ class App extends Component {
     console.log('render')
     const { 
       windowWidth,
+      windowHeight,
       headerText,
       champData, 
       activeView, 
@@ -161,9 +183,11 @@ class App extends Component {
       iconsLoaded, 
       skinsLoaded, 
       skinStyle, 
-      skinLoadedStyle } = this.state;
+      skinLoadedStyle,
+      champDetailBackgroundStyle,
+      champDetailBackgroundLoadedStyle,
+      backgroundLoaded } = this.state;
 
-      console.log(windowWidth)
     let version = '7.14.1'
     let champ = {};
 
@@ -188,8 +212,8 @@ class App extends Component {
         {activeView === 'champList' && <div name='champList' className='champList' style={{background: 'url(http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg) no-repeat center center fixed'}}>
           <div style={{paddingTop: 110}}>
           {champData && Object.keys(champData.data).map((champ, i) => {
-            const name = champData.data[champ].name
-            const title = champData.data[champ].title
+            const name = champData.data[champ].name;
+            const title = champData.data[champ].title;
 
             return (
               <span className='icon' onClick={() => this.handleIconClick(champ)} style={iconsLoaded[i] ? iconLoadedStyle : iconStyle}>
@@ -201,15 +225,18 @@ class App extends Component {
           </div>
         </div>}
         {activeView === 'champDetail' && 
-        <div name='champDetail' className='champDetail' style={{background: 'url(' + backgroundUrl + ') no-repeat top right fixed'}}>
+        <div name='champDetail' className='champDetail' style={{position: 'absolute', top: 0, left: 0, width: windowWidth, height: windowHeight, overflow: 'hidden'}}>
+          <img onLoad={this.onBackgroundLoad.bind(this)} className='champDetailBackground' src={backgroundUrl} style={backgroundLoaded ? champDetailBackgroundLoadedStyle : champDetailBackgroundStyle} />
           <div style={{paddingTop: 110}}>
           
           <div style={{textAlign: 'left', margin: '30px 5%'}}>
-          <iframe width="560" height="315" src={"https://www.youtube.com/embed/" + activeVideo + '?rel=0'} frameborder="0" allowfullscreen></iframe>
+          <iframe width="560" height="315" src={"https://www.youtube.com/embed/" + activeVideo + '?rel=0&autoplay=1'} frameborder="0" allowfullscreen></iframe>
           </div>
 
           <div className='skinContainer'>
           {champ.skins.map((skin, i) => {
+            if(i === 0) return;
+
             const path = skinPath + champ.key + '_' + i + '.jpg';
             const path2 = splashPath + champ.key + '_' + i + '.jpg';
             let skinName = skin.name;
