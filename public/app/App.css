@@ -63,7 +63,7 @@ body {
 .backBtn {
   position: absolute;
   top: 65px;
-  left: 100px;
+  left: 5%;
   width: 80px;
   height: 35px;
 }
@@ -137,10 +137,10 @@ body {
 }
 
 .skinContainer {
-  height: 194px;
+  height: auto;
   margin: 20px 0;
   width: 100%;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .skinDetail {
@@ -270,7 +270,7 @@ body {
     height: auto;
     margin: 20px 0;
     width: 100%;
-    overflow: hidden;
+    /*overflow: hidden;*/
   }
 
   .skinDetail {
