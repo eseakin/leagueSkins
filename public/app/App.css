@@ -22,6 +22,11 @@
   z-index: 3;
 }
 
+.App-header p {
+  margin: 10px;
+  padding: 0;
+}
+
 .App-intro {
   font-size: large;
 }
@@ -33,14 +38,11 @@
 
 body {
   background-color: black;
+  user-select: none;
+  cursor: default;
 }
 
-.backBtn {
-  position: absolute;
-  top: 70px;
-  left: 100px;
-  width: 75px;
-  height: 35px;
+.btn {
   padding: 5px 10px;
   font-size: 20px;
   text-align: center;
@@ -52,8 +54,21 @@ body {
   border-radius: 2px;
 }
 
-.backBtn:hover {
+.btn:hover {
   background-color: #114691;
+}
+
+.backBtn {
+  position: absolute;
+  top: 65px;
+  left: 100px;
+  width: 75px;
+  height: 35px;
+}
+
+.showMore {
+  display: block;
+  margin: 20px auto;
 }
 
 .icon {
@@ -78,6 +93,7 @@ body {
 
 .icon > img:hover {
   opacity: 1;
+  cursor: pointer;
 }
 
 .icon > p {
@@ -99,12 +115,13 @@ body {
 }
 
 .champDetailBackground {
-  height: auto; 
   z-index: -1;
-  position: absolute;
-  top: 0; 
-  left: 0;
   transition: 1s all;
+  position: fixed;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
 }
 
 .skinContainer {
