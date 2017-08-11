@@ -107,22 +107,23 @@ class App extends Component {
       headerText,
       iconsLoaded: this.state.iconsLoaded.fill(false),
       skinsLoaded: [],
-      backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_1.jpg'
+      backgroundLoaded: false,
+      
     });
 
     skinName = skinName.split(' ').join('+');
     this.searchYoutube(skinName);
 
-    setTimeout(() => this.setState({ activeView: 'champDetail' }), 1000);
+    setTimeout(() => this.setState({backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_1.jpg', activeView: 'champDetail' }), 500);
   }
 
   handleBack() {
     this.setState({
-      activeView: 'champList', 
+      
       headerText: 'Pick a champ to preview their skins',
-      backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg',
       backgroundLoaded: false
     });
+    setTimeout(() => this.setState({activeView: 'champList', backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg'}), 500);
   }
 
   handleShowMore() {
