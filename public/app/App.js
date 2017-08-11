@@ -237,7 +237,7 @@ class App extends Component {
 
 
         {activeView === 'champList' && <div name='champList' className='champList'>
-          <div style={{paddingTop: 110}}>
+          
           {champData && Object.keys(champData.data).map((champ, i) => {
             if(i >= iconsPerRow * 3 && !showMore)
               return;
@@ -253,15 +253,13 @@ class App extends Component {
             )
           })}
           <button className='showMore btn' onClick={this.handleShowMore.bind(this)}>{showMoreText}</button>
-          </div>
+          
         </div>}
 
 
         {activeView === 'champDetail' && 
         <div name='champDetail' className='champDetail' style={{overflow: 'hidden'}}>
-          
-          <div style={{paddingTop: 110}}>
-          
+
           <div className='youtubeContainer'>
           <iframe src={"https://www.youtube.com/embed/" + activeVideo + '?rel=0&autoplay=1'} frameBorder="0" allowFullScreen></iframe>
           </div>
@@ -299,7 +297,6 @@ class App extends Component {
               </div>
             )
           })}
-          </div>
           </div>
         </div>}
 

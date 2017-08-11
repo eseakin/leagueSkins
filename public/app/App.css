@@ -111,9 +111,9 @@ body {
 }
 
 .champDetail, .champList {
-  background-size: cover !important;
   display: block;
-  /*padding-bottom: 30px;*/
+
+  padding-top: 110px;
 }
 
 .champDetailBackground {
@@ -194,8 +194,22 @@ body {
 
 
 @media (max-width: 600px) {
-  .icon {
+
+  .App-header {
+    position: relative;
+    /*margin: 0;*/
     /*border: 1px solid red;*/
+  }
+
+  .App-header p {
+    font-size: 1em;
+  }
+
+  .champDetail, .champList {
+    padding: 0;
+  }
+
+  .icon {
     width: 60px;
     height: 60px;
     position: relative;
