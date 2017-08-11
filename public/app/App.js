@@ -11,7 +11,7 @@ class App extends Component {
       windowHeight: window.innerHeight,
       resizeUpdate: false,
       showMore: false,
-      showMoreText: 'Show More',
+      showMoreText: 'Show More ▾',
       headerText: 'Pick a champ to preview their skins',
       activeView: 'champList',
       activeChamp: 'Aatrox',
@@ -22,14 +22,14 @@ class App extends Component {
       iconStyle: {
         marginLeft: 5,
         marginRight: 5,
-        marginBottom: 5,
+        marginBottom: 20,
         marginTop: 700,
         opacity: 0
       },
       iconLoadedStyle: {
         marginLeft: 5,
         marginRight: 5,
-        marginBottom: 5,
+        marginBottom: 20,
         marginTop: 5,
         opacity: 1
       },
@@ -114,7 +114,10 @@ class App extends Component {
     skinName = skinName.split(' ').join('+');
     this.searchYoutube(skinName);
 
-    setTimeout(() => this.setState({backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_1.jpg', activeView: 'champDetail' }), 500);
+    setTimeout(() => {
+      this.setState({backgroundUrl: 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/' + champ + '_1.jpg', activeView: 'champDetail' })
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }, 500);
   }
 
   handleBack() {
@@ -123,15 +126,18 @@ class App extends Component {
       headerText: 'Pick a champ to preview their skins',
       backgroundLoaded: false
     });
-    setTimeout(() => this.setState({activeView: 'champList', backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg'}), 500);
+    setTimeout(() => {
+      this.setState({activeView: 'champList', backgroundUrl: 'http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg'})
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
+    }, 500);
   }
 
   handleShowMore() {
     let showMoreText;
     if(!this.state.showMore)
-      showMoreText = 'Show Less';
+      showMoreText = 'Show Less ▴';
     else
-      showMoreText = 'Show More';
+      showMoreText = 'Show More ▼';
 
     this.setState({ showMore: !this.state.showMore, showMoreText });
   }
@@ -216,7 +222,8 @@ class App extends Component {
     const skinPath = 'http://ddragon.leagueoflegends.com/cdn/img/champion/loading/';
     const splashPath = 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/';
 
-    let iconsPerRow = Math.floor(windowWidth / 110);
+    let iconSize = windowWidth > 600 ? 110 : 70;
+    let iconsPerRow = Math.floor(windowWidth / iconSize);
 
     return (
       <div className="App">
@@ -225,8 +232,9 @@ class App extends Component {
           <p className="App-intro">
             {headerText}
           </p>
-          {activeView === 'champDetail' && <button className='backBtn btn' onClick={this.handleBack.bind(this)}>Back</button>}
+          {activeView === 'champDetail' && <button className='backBtn btn' onClick={this.handleBack.bind(this)}>&lsaquo;&nbsp;Back</button>}
         </div>
+
 
         {activeView === 'champList' && <div name='champList' className='champList'>
           <div style={{paddingTop: 110}}>
@@ -238,7 +246,7 @@ class App extends Component {
             const title = champData.data[champ].title;
 
             return (
-              <span className='icon' onClick={() => this.handleChampClick(champ)} style={iconsLoaded[i] ? iconLoadedStyle : iconStyle}>
+              <span key={i} className='icon' onClick={() => this.handleChampClick(champ)} style={iconsLoaded[i] ? iconLoadedStyle : iconStyle}>
                 <img src={iconPath + champ + '.png'} onLoad={() => this.onIconLoad(i)} />
                 <p>{name}</p>
               </span>
@@ -247,13 +255,15 @@ class App extends Component {
           <button className='showMore btn' onClick={this.handleShowMore.bind(this)}>{showMoreText}</button>
           </div>
         </div>}
+
+
         {activeView === 'champDetail' && 
         <div name='champDetail' className='champDetail' style={{overflow: 'hidden'}}>
           
           <div style={{paddingTop: 110}}>
           
-          <div style={{textAlign: 'left', margin: '30px 5%'}}>
-          <iframe width="560" height="315" src={"https://www.youtube.com/embed/" + activeVideo + '?rel=0&autoplay=1'} frameBorder="0" allowFullScreen></iframe>
+          <div className='youtubeContainer'>
+          <iframe src={"https://www.youtube.com/embed/" + activeVideo + '?rel=0&autoplay=1'} frameBorder="0" allowFullScreen></iframe>
           </div>
 
           <div className='skinContainer'>
@@ -277,6 +287,7 @@ class App extends Component {
 
             return (
               <div 
+                key={i} 
                 className='skinDetail'
                 onClick={() => this.handleSkinClick(skin.name, path2, i)}
                 style={style}
@@ -291,6 +302,8 @@ class App extends Component {
           </div>
           </div>
         </div>}
+
+
         <div className='background'>
           <img onLoad={this.onBackgroundLoad.bind(this)} className='champDetailBackground' src={backgroundUrl} style={backgroundLoaded ? champDetailBackgroundLoadedStyle : champDetailBackgroundStyle} />
         </div>

@@ -1,20 +1,21 @@
 .App {
   text-align: center;
-  /*background: rgba(50, 50, 50, 0.8);*/
-  /*background: url("http://cdn.leagueoflegends.com/lolkit/1.1.6/resources/images/bg-default.jpg") no-repeat center center fixed;*/
-  background-size: cover;
-
 }
 
-.App-logo {
+/*.App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
-}
+}*/
+/*
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}*/
 
 .App-header {
   background: rgba(25, 25, 25, .6);
   height: 90px;
-  padding: 10px;
+  padding: 10px 0;
   color: white;
   position: fixed;
   width: 100%;
@@ -22,8 +23,12 @@
   z-index: 3;
 }
 
+.App-header img {
+  max-width: 90%;
+}
+
 .App-header p {
-  margin: 10px;
+  margin: 10px 0;
   padding: 0;
 }
 
@@ -31,15 +36,11 @@
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
 body {
   background-color: black;
   user-select: none;
   cursor: default;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .btn {
@@ -52,6 +53,7 @@ body {
   background-color: #1659b7;
   border: 1px solid #1865d0;
   border-radius: 2px;
+  transition: 1s all;
 }
 
 .btn:hover {
@@ -62,7 +64,7 @@ body {
   position: absolute;
   top: 65px;
   left: 100px;
-  width: 75px;
+  width: 80px;
   height: 35px;
 }
 
@@ -124,6 +126,16 @@ body {
   min-height: 100%;
 }
 
+.youtubeContainer {
+  text-align: left;
+  margin: 30px 5%;
+}
+
+.youtubeContainer iframe {
+  width:560px;
+  height:315px;
+}
+
 .skinContainer {
   height: 194px;
   margin: 20px 0;
@@ -175,3 +187,122 @@ body {
   z-index: 2;
   background: rgba(25, 25, 25, .8);
 }
+
+
+
+
+
+
+@media (max-width: 600px) {
+  .icon {
+    /*border: 1px solid red;*/
+    width: 60px;
+    height: 60px;
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .icon > img {
+    width: 56px;
+    height: 56px;
+    top: 2px;
+    left: 2px;
+    /*border: 1px solid pink;*/
+    position: absolute;
+  }
+
+  .icon > p {
+    /*border: 1px solid red;*/
+    position: absolute;
+    top: -40px;
+    left: 0px;
+    /*margin-top: 62px;*/
+    /*height: 50px;*/
+    font-size: .7em;
+    width: 100%;
+    text-align: center;
+  }
+
+  .icon:hover {
+    background-image: linear-gradient(to right, #c2b189 10px, transparent 10px), linear-gradient(to right, #c2b189 10px, transparent 10px), linear-gradient(to bottom, #c2b189 10px, transparent 10px), linear-gradient(to bottom, #c2b189 10px, transparent 10px);
+    background-size: 100% 2px, 100% 2px, 2px 100%, 2px 100%;
+    background-position: -5px 0%, -5px 100%, 0% -5px, 100% -5px;
+    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  }
+
+  .backBtn {
+    position: absolute;
+    top: 110px;
+    left: 0px;
+    width: 60px;
+    height: 25px;
+    font-size: .7em;
+  }
+
+  .youtubeContainer {
+    text-align: center;
+    margin: 40px 0 30px;
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  .youtubeContainer iframe {
+    width: 90%;
+    height: auto;
+  }
+
+  .skinContainer {
+    height: auto;
+    margin: 20px 0;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .skinDetail {
+    transition: 2s margin-left, 1s opacity, .25s border;
+    cursor: pointer; 
+    width: 75px; 
+    height: 135px; 
+    display: inline-block;
+    border: 2px solid #333;
+    background-color: black;
+  }
+
+  .skinDetail:hover {
+    border: 2px solid #c2b189;
+  }
+
+  .skinDetail > div {
+    position: relative;
+    width: 75px; 
+    height: 135px; 
+    overflow: hidden;
+  }
+
+  .skinDetail img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 75px; 
+    height: 135px; 
+    z-index: 1;
+    overflow: hidden;
+    clip: rect(5px, 95px, 180px, 5px);
+  }
+
+  .skinDetail p {
+    position: absolute;
+    left: 0;
+    top: 90px;
+    text-align: center;
+    font-size: .7em;
+    height: 45px;
+    width: 71px;
+    color: white;
+    padding: 3px;
+    z-index: 2;
+    background: rgba(25, 25, 25, .8);
+  }
+}
+
