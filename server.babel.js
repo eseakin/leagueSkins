@@ -76,6 +76,10 @@ app.post('/youtube', (req, res) => {
   .catch(err => console.log(err));
 });
 
+app.get('/riot.txt', (req, res) => {
+  res.send('11ebdc3c-c815-4533-b331-55e5434144df')
+})
+
 let port = process.env.PORT || 9000;
 
 app.listen(port);

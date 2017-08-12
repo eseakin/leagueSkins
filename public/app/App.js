@@ -336,12 +336,6 @@ class App extends Component {
             if(skinName === activeSkin)
               style.border = '2px solid #1db7bf';
 
-            // if(skinName === 'default')
-            //   skinName = 'Default';
-
-            // if(skinName.length > 19)
-            //   skinName = skinName.substring(0, 19);
-
             return (
               <div 
                 key={i} 
