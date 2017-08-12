@@ -263,7 +263,7 @@ body {
     transition: 1s all;
     position: fixed;
     top: 0;
-    right: 0;
+    right: -200px;
     width: auto;
     height: auto;
     /*height: auto;*/
