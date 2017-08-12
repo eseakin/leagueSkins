@@ -13,6 +13,8 @@ class App extends Component {
       showMore: false,
       showMoreText: 'Show More ▾',
       headerText: 'Pick a champ to preview their skins',
+      searchTerms: '',
+      champsDisplayed: {},
       activeView: 'champList',
       activeChamp: 'Aatrox',
       activeSkin: '',
@@ -73,7 +75,8 @@ class App extends Component {
     .then((res) => {
         // console.log('componentWillMount', res.data)
         this.setState({
-          champData: res.data
+          champData: res.data,
+          champsDisplayed: res.data.data
         });
       })
     .catch((err) => console.log(err));
@@ -187,6 +190,55 @@ class App extends Component {
     this.setState({skinsLoaded});
   }
 
+  searchChampions() {
+    if(!this.state.champData)
+      return;
+
+    let searchTerms = document.getElementById('searchInput').value;
+
+    if(!searchTerms) {
+      searchTerms = '';
+      this.setState({searchTerms, champsDisplayed: this.state.champData.data})
+    }
+
+    if(searchTerms.length < 2)
+      return;
+    
+    let data = this.state.champData.data
+    let results = {}
+    let search = searchTerms.toUpperCase();
+
+    for(let key in data) {
+      let skins = data[key].skins;
+      let match = false;
+
+      for(let i in skins) {
+        if(match)
+          break;
+
+        let skin = skins[i].name.toUpperCase();
+        if(skin.indexOf(search) != -1) {
+          results[key] = data[key];
+          match = true;
+        }        
+      }
+    }
+    this.setState({searchTerms, champsDisplayed: results});
+    
+  }
+
+  submitSearch(e) {
+    e.preventDefault();
+    this.searchChampions();
+    if(this.state.activeView === 'champDetail')
+      this.handleBack();
+  }
+
+  clearSearch() {
+    document.getElementById('searchInput').value = '';
+    this.setState({searchTerms: '', champsDisplayed: this.state.champData.data})
+  }
+
   render() {
     // console.log('render')
     const { 
@@ -194,6 +246,7 @@ class App extends Component {
       windowHeight,
       headerText,
       champData, 
+      champsDisplayed,
       activeView, 
       activeChamp, 
       activeSkin,
@@ -232,13 +285,19 @@ class App extends Component {
           <p className="App-intro">
             {headerText}
           </p>
+          <div className='searchContainer'>
+            <form onSubmit={this.submitSearch.bind(this)}>
+              <input id='searchInput' className='searchInput' placeholder='Search Skins' onChange={this.searchChampions.bind(this)} />
+              <span className='searchClear' onClick={this.clearSearch.bind(this)}>X</span>
+            </form>
+          </div>
           {activeView === 'champDetail' && <button className='backBtn btn' onClick={this.handleBack.bind(this)}>&lsaquo;&nbsp;Back</button>}
         </div>
 
 
         {activeView === 'champList' && <div name='champList' className='champList'>
           
-          {champData && Object.keys(champData.data).map((champ, i) => {
+          {champData && Object.keys(champsDisplayed).map((champ, i) => {
             if(i >= iconsPerRow * 3 && !showMore)
               return;
 
